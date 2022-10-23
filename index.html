@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>axios crud crud project</title>
+    
+</head>
+<body>
+
+    <form class="container form-control mt-4 mb-5 bg-primary  text-white" action="" id="reg">
+            
+        <label for="Name" class="lab mb-2"></label><br>
+        <input type="number" name="Name"  class="inp mb-2" placeholder="enter expense" id="amount">
+        <label for="text" class="lab mb-2"></label><br>
+        <input type="text" name="Email"  class="inp mb-2" placeholder="enter discription" id="dis">
+        <label for="" class="lab mb-2"> </label><br>
+
+        <select id="opt" class="form-select">
+            <option>Select</option>
+            <option value="movie">Movie</option>
+            <option value="fuel">Fuel</option>
+            <option value="elctricity">Electricity</option>
+            <option value="food">Food</option>
+
+        </select>
+
+        <button type="submit" class="btn btnsumbit mb-3">save expense</button>
+        
+        
+    
+        </form>
+
+        <div class="container">
+        <table class="table text-center table-striped table-dark table-hover    " id="tab">
+
+            <thead>
+                <tr>
+                
+                <!-- <th>Amount</th>
+                <th>Discription</th>
+                <th>Option </th> -->
+                
+                </tr>
+                </thead>
+</table>
+</div>
+
+        <div class="container tcon">
+
+
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.0.0-alpha.1/axios.min.js"></script>
+
+    
+       <script  >
+
+
+let amount=document.querySelector('#amount')
+let dis=document.querySelector('#dis')
+
+let optval=document.querySelector('#opt')
+
+let form=document.querySelector('#reg')
+
+let btnsubmit=document.querySelector('.btnsumbit')
+
+
+let tab=document.querySelector('.tcon')
+
+
+// axios post 
+
+
+
+
+
+form.addEventListener('submit',(e)=>{
+
+
+e.preventDefault()
+
+if(amount.value==""||dis.value==""||optval.value=="Select"){
+
+    alert('fields cannot ne empty ')
+
+
+}
+
+
+
+let obj=
+{
+    amount:amount.value,
+    dis:dis.value,
+    optval:optval.value
+}
+
+
+console.log(obj);
+
+
+
+axios.post('https://crudcrud.com/api/a6001c6c990f4984a2421a2c2ebb6205/addexpense',obj)
+.then(function (response) {
+console.log(response);
+
+alert("expenses saved in server")
+
+location.reload()
+
+amount.value=''
+dis.value=''
+optval.options[optval.selectedIndex].text='Select'
+
+
+})
+.catch(function (error) {
+console.log(error);
+alert("check console there is error while submitting response")
+});
+
+})
+
+let loc=''
+
+
+// axios curd crud get users
+
+
+window.addEventListener('DOMContentLoaded', getusers)
+
+function getusers(){
+
+
+axios.get('https://crudcrud.com/api/a6001c6c990f4984a2421a2c2ebb6205/addexpense')
+.then((response)=>{
+
+for(let i=0;i<response.data.length;i++){
+
+
+
+loc+=`
+
+<div class="crd text-center  text-white   ">
+            <h5  id="nameresponse">${response.data[i].amount}</h5>
+            <h5 id="emailresponse">${response.data[i].dis}</h5>
+            <h5 id="phoneresponse">${response.data[i].optval}
+            <button class="btn btn-danger removebtn ms-4 far fa-times mx-2  btn-sm delete" id=${response.data[i]._id}  ></button><button class="mr-2 btn btn-warning  btn-sm text-white bg-dark fas fa-edit " id=${response.data[i]._id}></button> 
+
+            </h5>
+            
+                    </div>
+
+`
+
+
+
+}
+tab.innerHTML=loc
+
+
+})
+
+.catch((error)=>{
+   console.log(error);
+})
+
+}
+
+
+
+// delete and edit axios curd curd operations
+
+
+        
+        tab.addEventListener('click',(e)=>{
+
+let id=e.target.id
+let idid=e.target.id
+
+if(e.target.classList.contains('far')){
+    
+    axios.delete(`https://crudcrud.com/api/a6001c6c990f4984a2421a2c2ebb6205/addexpense/${id}`)
+    .then((response)=>{
+
+
+        window.location.reload()
+
+    })
+    .catch((error)=>{
+        console.log(error);
+    })
+}
+
+if(e.target.classList.contains('fas')){
+
+
+    let selector=e.target.parentElement.parentElement
+
+    let nametxt=selector.querySelector('#nameresponse').textContent
+        let emailtxt=selector.querySelector('#emailresponse').textContent
+        let phonetxt=selector.querySelector('#phoneresponse').textContent
+        
+        
+        
+        
+        
+        amount.value=nametxt
+        dis.value=emailtxt
+
+       
+        optval.options[optval.selectedIndex].text = phonetxt;
+
+}
+
+btnsubmit.addEventListener('click',(e)=>{
+
+    e.preventDefault()
+
+    let obje=
+{
+    amount:amount.value,
+    dis:dis.value,
+    optval:optval.value
+}
+
+    console.log(id,idid);
+
+    axios.put(`https://crudcrud.com/api/a6001c6c990f4984a2421a2c2ebb6205/addexpense/${idid}`,obje)
+    .then((response)=>{
+        console.log(response);
+        location.reload()
+    })
+    .catch((error)=>{
+        console.log(error);
+    })
+
+    
+})
+
+
+
+})
+     </script>
+</body>
+</html>
